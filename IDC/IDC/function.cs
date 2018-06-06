@@ -24,16 +24,15 @@ namespace IDC
                 h2.Add(c.ToString(), giri2trimmed.Split(c).Length - 1);
 				h3.Add(c.ToString(), Math.Abs(h1[c.ToString()] - h2[c.ToString()]));				
 				farktoplam = farktoplam + h3[c.ToString()];
-            }
-            
+            }            
 			float s1l = giri1trimmed.Length;
-            float x = s1l / 27;
-            Console.WriteLine(giri1trimmed.Length);
-            Console.WriteLine("x * 2.7 =" + x * 2.7 + " xraw = " + x );
+            float x = s1l / Program.bolen;
+            Console.WriteLine("uzunluk = " + giri1trimmed.Length);
+            Console.WriteLine("x * " + Convert.ToString(Program.carpan) + " =" + x * Program.carpan + " xraw = " + x );
 		    Console.WriteLine("fark = " + farktoplam);
             foreach (char c in lol)
             {
-                if (h3[c.ToString()] < x & farktoplam < x * 2.7)
+                if (h3[c.ToString()] < x & farktoplam < x * Program.carpan)
                 {
                     returnvalue = 1;
                 }
@@ -42,8 +41,7 @@ namespace IDC
                     returnvalue = 0;
                     break;
                 }
-            }
-            
+            }           
             return returnvalue;
         }
     }
