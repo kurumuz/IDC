@@ -1,74 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System;
 
 namespace IDC
 {
     class function
     {
-        public static T _indir_jason_dosya<T>(string url) where T : new()
+        public static int FarkHesapla(string giri1, string giri2)
         {
-            using (var w = new WebClient())
-            {
-                var json_veri = string.Empty;
+            var giri1trimmed = string.Concat(giri1.Where(c => !char.IsWhiteSpace(c))).ToLower();
+            var giri2trimmed = string.Concat(giri2.Where(c => !char.IsWhiteSpace(c))).ToLower();
+            int farktoplam = 0;
+            int returnvalue = 1;
+            Dictionary<string, int> h1 = new Dictionary<string, int>();
+			Dictionary<string, int> h2 = new Dictionary<string, int>();
+			Dictionary<string, int> h3 = new Dictionary<string, int>();
+            const string lol = "abcçdefgğhıijklmnoöprsştuüyzx0123456789.()/?-=+,";
 
-                try
+            foreach (char c in lol)
+            {
+
+                h1.Add(c.ToString(), giri1trimmed.Split(c).Length - 1);    
+                h2.Add(c.ToString(), giri2trimmed.Split(c).Length - 1);
+				h3.Add(c.ToString(), Math.Abs(h1[c.ToString()] - h2[c.ToString()]));				
+				farktoplam = farktoplam + h3[c.ToString()];
+            }            
+			float s1l = giri1trimmed.Length;
+            float x = s1l / Program.bolen;
+            Console.WriteLine("uzunluk = " + giri1trimmed.Length);
+            Console.WriteLine("x * " + Convert.ToString(Program.carpan) + " =" + x * Program.carpan + " xraw = " + x );
+		    Console.WriteLine("fark = " + farktoplam);
+            foreach (char c in lol)
+            {
+                if (h3[c.ToString()] < x & farktoplam < x * Program.carpan)
                 {
-                    json_veri = w.DownloadString(url);
-
+                    returnvalue = 1;
                 }
-                catch (Exception) { }
-                return !string.IsNullOrEmpty(json_veri) ? JsonConvert.DeserializeObject<T>(json_veri) : new T();
-            }
-        }
-        public static int FarkHesapla(string s, string t)
-        {
-            int n = s.Length;
-            int m = t.Length;
-            int[,] d = new int[n + 1, m + 1];
-
-            // Step 1
-            if (n == 0)
-            {
-                return m;
-            }
-
-            if (m == 0)
-            {
-                return n;
-            }
-
-            // Step 2
-            for (int i = 0; i <= n; d[i, 0] = i++)
-            {
-            }
-
-            for (int j = 0; j <= m; d[0, j] = j++)
-            {
-            }
-
-            // Step 3
-            for (int i = 1; i <= n; i++)
-            {
-                //Step 4
-                for (int j = 1; j <= m; j++)
+                else 
                 {
-                    // Step 5
-                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
-
-                    // Step 6
-                    d[i, j] = Math.Min(
-                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
-                        d[i - 1, j - 1] + cost);
+                    returnvalue = 0;
+                    break;
                 }
-            }
-            // Step 7
-            return d[n, m];
+            }           
+            return returnvalue;
         }
     }
 }
-
